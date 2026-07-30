@@ -1,0 +1,35 @@
+{
+  "name": "tatkal-defeater",
+  "private": true,
+  "description": "A fair reservation system that defeats bots and scalpers — random lottery admission, seat locking, and anti-bot measures for tatkal booking",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pm987/tatkal-defeater.git"
+  },
+  "author": "Pm987",
+  "license": "MIT",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:api": "turbo dev --filter=@tatkal/api",
+    "dev:web": "turbo dev --filter=@tatkal/web",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "db:push": "turbo db:push --filter=@tatkal/database",
+    "db:seed": "turbo db:seed --filter=@tatkal/database",
+    "test:load:api": "k6 run tests/load/admission-gate.js",
+    "test:load:tatkal": "npx tsx tests/load/tatkal-time-warp.ts",
+    "test:load:browser": "npx playwright test tests/load/playwright-simulator.ts"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.6.0",
+    "prettier": "^3.4.0",
+    "eslint": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
