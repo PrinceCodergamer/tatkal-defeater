@@ -1,18 +1,626 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --danger: #dc2626;
-  --success: #16a34a;
-  --warning: #f59e0b;
-  --muted: #6b7280;
+/* ═══════════════════════════════════════════════════════════════
+   IRCTC DESIGN SYSTEM — Professional Indian Railway Booking
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Primary: Indian Railways Deep Blue ── */
+  --color-irctc-900: #001a33;
+  --color-irctc-800: #002244;
+  --color-irctc-700: #003366;
+  --color-irctc-600: #004080;
+  --color-irctc-500: #00509e;
+  --color-irctc-400: #1a6bb5;
+  --color-irctc-300: #4a90d9;
+  --color-irctc-200: #8ab8e8;
+  --color-irctc-100: #c5ddf5;
+  --color-irctc-50: #e8f1fa;
+
+  /* ── Accent: Indian Railways Orange ── */
+  --color-orange-600: #e06500;
+  --color-orange-500: #f37021;
+  --color-orange-400: #f57c00;
+  --color-orange-300: #ff8c00;
+  --color-orange-200: #ffb366;
+  --color-orange-100: #fff0e0;
+  --color-orange-50: #fff8f0;
+
+  /* ── Surface / Semantic Colors ── */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f0f2f5;
+  --color-surface-hover: #e8ecf1;
+  --color-border: #dce1e8;
+  --color-border-light: #e8ecf1;
+
+  --color-text: #333333;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+
+  /* ── Status ── */
+  --color-success: #27ae60;
+  --color-success-bg: #eafaf1;
+  --color-warning: #f39c12;
+  --color-warning-bg: #fef9e7;
+  --color-danger: #e74c3c;
+  --color-danger-bg: #fdedec;
+
+  /* ── Fonts (Loaded via next/font in layout.tsx) ── */
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  /* ── Radius ── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-dropdown: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
+/* ─── Base ───────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--color-surface-alt);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Selection ──────────────────────────────────────────────── */
+::selection { background-color: var(--color-irctc-100); color: var(--color-irctc-900); }
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background-color: transparent; }
+::-webkit-scrollbar-thumb { background-color: #c0c8d4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background-color: #a0aab8; }
+
+/* ═══════════════════════════════════════════════════════════════
+   IRCTC COMPONENT SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* ─── Card ─── */
+  .irctc-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .irctc-card:hover { box-shadow: var(--shadow-card-hover); }
+
+  /* ─── Input ─── */
+  .irctc-input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
+  }
+  .irctc-input:focus {
+    border-color: var(--color-irctc-400);
+    box-shadow: 0 0 0 3px rgba(0, 80, 158, 0.1);
+  }
+  .irctc-input::placeholder { color: var(--color-text-muted); }
+  .irctc-input.error { border-color: var(--color-danger); }
+
+  /* ─── Select ─── */
+  .irctc-select {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2rem;
+  }
+  .irctc-select:focus {
+    border-color: var(--color-irctc-400);
+    box-shadow: 0 0 0 3px rgba(0, 80, 158, 0.1);
+  }
+
+  /* ─── Swap Button ─── */
+  .irctc-swap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--color-irctc-700);
+    font-size: 1rem;
+  }
+  .irctc-swap:hover {
+    background-color: var(--color-irctc-50);
+    border-color: var(--color-irctc-300);
+    box-shadow: 0 2px 8px rgba(0, 80, 158, 0.15);
+  }
+
+  /* ─── Buttons ─── */
+  .irctc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: none;
+    letter-spacing: 0.01em;
+  }
+  .irctc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .irctc-btn-primary {
+    background: linear-gradient(180deg, var(--color-irctc-600) 0%, var(--color-irctc-700) 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 51, 102, 0.3);
+  }
+  .irctc-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--color-irctc-500) 0%, var(--color-irctc-600) 100%);
+    box-shadow: 0 4px 8px rgba(0, 51, 102, 0.4);
+  }
+
+  .irctc-btn-orange {
+    background: linear-gradient(180deg, var(--color-orange-400) 0%, var(--color-orange-500) 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(243, 112, 33, 0.3);
+  }
+  .irctc-btn-orange:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--color-orange-300) 0%, var(--color-orange-400) 100%);
+    box-shadow: 0 4px 8px rgba(243, 112, 33, 0.4);
+  }
+
+  .irctc-btn-success {
+    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+  }
+
+  .irctc-btn-outline {
+    background-color: var(--color-surface);
+    color: var(--color-irctc-700);
+    border: 1.5px solid var(--color-irctc-300);
+  }
+  .irctc-btn-outline:hover:not(:disabled) {
+    background-color: var(--color-irctc-50);
+    border-color: var(--color-irctc-400);
+  }
+
+  .irctc-btn-ghost {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+  }
+  .irctc-btn-ghost:hover:not(:disabled) {
+    background-color: var(--color-surface-hover);
+    color: var(--color-text);
+  }
+
+  /* ─── Badge ─── */
+  .irctc-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .irctc-badge-blue { background-color: var(--color-irctc-100); color: var(--color-irctc-700); }
+  .irctc-badge-orange { background-color: var(--color-orange-100); color: var(--color-orange-600); }
+  .irctc-badge-green { background-color: var(--color-success-bg); color: var(--color-success); }
+  .irctc-badge-red { background-color: var(--color-danger-bg); color: var(--color-danger); }
+
+  /* ─── Tag / Chip ─── */
+  .irctc-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: var(--color-irctc-50);
+    color: var(--color-irctc-600);
+  }
+
+  /* ─── Label ─── */
+  .irctc-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.375rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   IRCTC HEADER
+   ═══════════════════════════════════════════════════════════════ */
+@layer components {
+  .irctc-topbar {
+    background-color: var(--color-irctc-800);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.75rem;
+    padding: 0.375rem 0;
+    text-align: center;
+    border-bottom: 2px solid var(--color-orange-400);
+  }
+
+  .irctc-header {
+    background: linear-gradient(180deg, var(--color-irctc-700) 0%, var(--color-irctc-800) 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .irctc-header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .irctc-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: white;
+  }
+
+  .irctc-logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-irctc-400), var(--color-orange-400));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .irctc-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .irctc-nav-item {
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+  .irctc-nav-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
+  .irctc-nav-item.active { background-color: rgba(255,255,255,0.15); color: white; }
+
+  .irctc-nav-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  /* ─── Header Sub Nav ─── */
+  .irctc-subnav {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .irctc-subnav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .irctc-subnav-item {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .irctc-subnav-item:hover { color: var(--color-irctc-700); border-bottom-color: var(--color-irctc-400); }
+  .irctc-subnav-item.active { color: var(--color-irctc-700); border-bottom-color: var(--color-orange-400); font-weight: 700; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH FORM — IRCTC Style
+   ═══════════════════════════════════════════════════════════════ */
+@layer components {
+  .irctc-search-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 20px rgba(0, 51, 102, 0.12);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .irctc-search-header {
+    background: linear-gradient(135deg, var(--color-irctc-700), var(--color-irctc-600));
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .irctc-search-body {
+    padding: 1.5rem;
+  }
+
+  .irctc-search-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: end;
+    margin-bottom: 1rem;
+  }
+
+  .irctc-search-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background-color: var(--color-irctc-50);
+    border-top: 1px solid var(--color-border-light);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TRAIN LISTING CARDS
+   ═══════════════════════════════════════════════════════════════ */
+@layer components {
+  .irctc-train-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .irctc-train-card:hover {
+    border-color: var(--color-irctc-300);
+    box-shadow: 0 4px 16px rgba(0, 80, 158, 0.1);
+  }
+
+  .irctc-train-number {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-irctc-700);
+  }
+
+  .irctc-train-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .irctc-train-time {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-text);
+  }
+
+  .irctc-train-station {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .irctc-train-duration {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════ */
+@layer components {
+  .irctc-footer {
+    background-color: var(--color-irctc-900);
+    color: rgba(255,255,255,0.7);
+    padding: 2.5rem 0 0;
+  }
+
+  .irctc-footer-top {
+    border-top: 3px solid var(--color-orange-400);
+  }
+
+  .irctc-footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .irctc-footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1rem 0;
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes trainMove {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100vw); }
+}
+
+@layer utilities {
+  .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+  .animate-fade-up { animation: fadeUp 0.5s ease-out; }
+  .animate-fade-down { animation: fadeDown 0.3s ease-out; }
+  .animate-slide-left { animation: slideLeft 0.4s ease-out; }
+  .animate-slide-right { animation: slideRight 0.4s ease-out; }
+  .animate-scale-in { animation: scaleIn 0.3s ease-out; }
+  .animate-pulse-soft { animation: pulseSoft 2s ease-in-out infinite; }
+}
+
+@keyframes trainSlide {
+  0% { transform: translateX(-120px); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
+}
+
+/* ─── Progress Bar ─── */
+@layer components {
+  .irctc-progress {
+    height: 4px;
+    background-color: var(--color-irctc-100);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .irctc-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-irctc-500), var(--color-orange-400));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* ─── Divider ─── */
+  .irctc-divider {
+    height: 1px;
+    background-color: var(--color-border);
+    margin: 1rem 0;
+  }
+
+  /* ─── Step Indicator ─── */
+  .irctc-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .irctc-step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  .irctc-step-number.active { background-color: var(--color-irctc-700); color: white; }
+  .irctc-step-number.done { background-color: var(--color-success); color: white; }
+  .irctc-step-number.pending { background-color: var(--color-border); color: var(--color-text-muted); }
+
+  .irctc-step-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .irctc-step-label.active { color: var(--color-text); }
+  .irctc-step-label.done { color: var(--color-success); }
+  .irctc-step-label.pending { color: var(--color-text-muted); }
+
+  /* ─── Loading Skeleton ─── */
+  .irctc-skeleton {
+    background: linear-gradient(90deg, #e8ecf1 25%, #f0f2f5 50%, #e8ecf1 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
