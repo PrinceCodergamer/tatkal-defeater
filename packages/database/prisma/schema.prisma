@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Core: Inventory & Reservation ─────────────────────────
+
+model InventorySlot {
+  id                String   @id @default(uuid())
+  resourceId        String
+  resourceType      String   // TRAIN, CONCERT, FLIGHT
+  label             String?  // e.g., "SL-001", "A1-12"
+  slotDate          DateTime
+  totalCapacity     Int
+  availableCapacity Int
+  version           Int      @default(1)  // Optimistic lock
+  holdExpiresAt     DateTime?             // Set when held for payment
+  price             Decimal
+  metadata          Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  reservations      Reservation[]
+  @@index([resourceId, slotDate])
+  @@index([resourceType, slotDate])
+  @@index([holdExpiresAt])
+  @@index([resourceId, slotDate, version])
+}
+
+model Reservation {
+  id               String            @id @default(uuid())
+  userId           String
+  resourceId       String
+  slotId           String
+  status           ReservationStatus @default(PENDING)
+  holdExpiresAt    DateTime?
+  confirmedAt      DateTime?
+  cancelledAt      DateTime?
+  quantity         Int               @default(1)
+  totalPrice       Decimal
+  idempotencyKey   String            @unique
+  deviceFingerprint String?
+  verifiedIdentity String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  slot   InventorySlot @relation(fields: [slotId], references: [id])
+  payments Payment[]
+
+  @@index([userId])
+  @@index([slotId, status])
+  @@index([status, holdExpiresAt])
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+  FAILED
+}
+
+// ─── Queue & Admission ─────────────────────────────────────
+
+model AdmissionToken {
+  id                String     @id @default(uuid())
+  userId            String
+  sessionId         String
+  token             String     @unique
+  status            TokenStatus @default(WAITING)
+  deviceFingerprint String?
+  identityVerified  Boolean    @default(false)
+  depositPaid       Boolean    @default(false)
+  depositAmount     Decimal    @default("0")
+  depositRefunded   Boolean    @default(false)
+  admittedAt        DateTime?
+  expiresAt         DateTime
+  createdAt         DateTime   @default(now())
+
+  @@index([userId, status])
+  @@index([deviceFingerprint, createdAt])
+}
+
+enum TokenStatus {
+  WAITING
+  ADMITTED
+  EXPIRED
+  CANCELLED
+}
+
+// ─── Anti-Fake Demand: Trust System ────────────────────────
+
+model UserTrustProfile {
+  id                  String     @id @default(uuid())
+  userId              String     @unique
+  identityHash        String?
+
+  totalHolds          Int        @default(0)
+  completedBookings   Int        @default(0)
+  abandonedHolds      Int        @default(0)
+
+  trustLevel          TrustLevel @default(NORMAL)
+  restrictedUntil     DateTime?
+  violationCount      Int        @default(0)
+  lastViolationAt     DateTime?
+
+  activeHolds         Int        @default(0)
+  dailyBookingCount   Int        @default(0)
+  dailyBookingResetAt DateTime
+
+  knownFingerprints   Json?
+  associatedAccounts  Int        @default(1)
+
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  @@index([identityHash])
+  @@index([trustLevel])
+  @@index([abandonedHolds, totalHolds])
+}
+
+enum TrustLevel {
+  TRUSTED
+  NORMAL
+  FLAGGED
+  RESTRICTED
+  BANNED
+}
+
+// ─── Deposit Tracking ──────────────────────────────────────
+
+model DepositTransaction {
+  id               String            @id @default(uuid())
+  userId           String
+  admissionTokenId String?
+  amount           Decimal
+  type             DepositType
+  status           DepositTxStatus   @default(PENDING)
+  paymentProvider  String?
+  paymentId        String?
+  createdAt        DateTime          @default(now())
+  settledAt        DateTime?
+
+  @@index([userId])
+  @@index([admissionTokenId])
+}
+
+enum DepositType {
+  PAYMENT
+  REFUND
+  FORFEIT
+  BONUS
+}
+
+enum DepositTxStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+// ─── Payment ──────────────────────────────────────────────
+
+model Payment {
+  id               String       @id @default(uuid())
+  reservationId    String
+  userId           String
+  amount           Decimal
+  currency         String       @default("INR")
+  provider         String       @default("stripe")
+  providerPaymentId String?
+  status           PaymentStatus @default(INITIATED)
+  idempotencyKey   String       @unique
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+
+  @@index([reservationId])
+  @@index([userId])
+}
+
+enum PaymentStatus {
+  INITIATED
+  PROCESSING
+  CAPTURED
+  FAILED
+  REFUNDED
+}
