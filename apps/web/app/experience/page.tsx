@@ -12,18 +12,12 @@ import {
   ShieldCheck,
   Zap,
   Timer,
-  Cloud,
   Server,
   Database,
   Network,
   Lock,
   Activity,
   Globe,
-  Cpu,
-  Github,
-  BookOpen,
-  CreditCard,
-  Bell,
 } from 'lucide-react';
 import { TRAIN_COMPONENTS, COMPLETE_TRAIN, EXPLODED_TRAIN, FEATURE_COMPONENTS } from '@/lib/train-assets';
 
