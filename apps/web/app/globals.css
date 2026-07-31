@@ -843,3 +843,12 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   NO-JS FALLBACK — scroll-reveal content must never stay invisible.
+   Next.js adds .no-js to <html> until hydration; force reveals visible.
+   ═══════════════════════════════════════════════════════════════ */
+html.no-js [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
