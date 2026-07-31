@@ -64,18 +64,15 @@ function ArchitectureDiagram() {
           </g>
         );
       })}
-      {nodes.map((n) => {
-        const Icon = n.icon;
-        return (
-          <g key={n.id} transform={`translate(${n.x} ${n.y})`}>
-            <circle r="5" fill={n.color} opacity="0.15" />
-            <circle r="2.4" fill={n.color} />
-            <text y="-6" textAnchor="middle" fontSize="2.2" fill="currentColor" className="font-semibold">
-              {n.label}
-            </text>
-          </g>
-        );
-      })}
+      {nodes.map((n) => (
+        <g key={n.id} transform={`translate(${n.x} ${n.y})`}>
+          <circle r="5" fill={n.color} opacity="0.15" />
+          <circle r="2.4" fill={n.color} />
+          <text y="-6" textAnchor="middle" fontSize="2.2" fill="currentColor" className="font-semibold">
+            {n.label}
+          </text>
+        </g>
+      ))}
     </svg>
   );
 }
