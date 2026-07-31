@@ -55,18 +55,16 @@ export function HeroSection() {
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/experience" className="irctc-btn irctc-btn-orange px-8 py-3 text-base" aria-label="Begin the cinematic experience">
+              <PlayCircle className="h-4 w-4" />
+              Begin Experience
+            </Link>
             <MagneticButton
               onClick={() => document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' })}
-              className="irctc-btn irctc-btn-orange px-8 py-3 text-base"
-            >
-              <Zap className="h-4 w-4" />
-              Search Trains
-            </MagneticButton>
-            <MagneticButton
-              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
               className="irctc-btn px-8 py-3 text-base border border-white/30 bg-white/5 text-white backdrop-blur-sm hover:bg-white/15"
             >
-              How it works
+              <Zap className="h-4 w-4" />
+              Book a Train
             </MagneticButton>
           </div>
         </motion.div>
