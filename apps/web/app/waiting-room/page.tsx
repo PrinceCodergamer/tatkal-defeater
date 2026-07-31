@@ -54,7 +54,9 @@ function WaitingRoomContent() {
     status: 'WAITING',
   });
   const [timeElapsed, setTimeElapsed] = useState(0);
-  const [loading, setLoading] = useState(true);
+  // Optimistic: position/total are already in the query params, so render
+  // content immediately instead of blocking on the first poll/socket round-trip.
+  const [loading, setLoading] = useState(false);
   const [messageIndex, setMessageIndex] = useState(0);
   const [prevPosition, setPrevPosition] = useState(status.position);
 
