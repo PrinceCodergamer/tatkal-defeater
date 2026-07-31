@@ -98,10 +98,10 @@ function LiveDashboard() {
   return (
     <div className="grid w-full max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
       {[
-        { label: 'Transactions/s', value: tps, icon: Activity, color: '#f37021' },
-        { label: 'P99 Latency', value: latency, suffix: 'ms', icon: Timer, color: '#4a90d9' },
-        { label: 'In Queue', value: queue, icon: Server, color: '#27ae60' },
-        { label: 'Uptime', value: 99.99, suffix: '%', icon: Globe, color: '#b45309' },
+        { label: 'Transactions/s', value: tps, icon: Activity, color: 'var(--color-orange-500)' },
+        { label: 'P99 Latency', value: latency, suffix: 'ms', icon: Timer, color: 'var(--color-irctc-400)' },
+        { label: 'In Queue', value: queue, icon: Server, color: 'var(--success)' },
+        { label: 'Uptime', value: 99.99, suffix: '%', icon: Globe, color: 'var(--warning)' },
       ].map(({ label, value, icon: Icon, color, suffix }) => (
         <div key={label} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
           <Icon className="mb-2 h-4 w-4" style={{ color }} />
