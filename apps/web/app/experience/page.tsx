@@ -149,11 +149,12 @@ export default function ExperiencePage() {
       });
 
       // Chapter 1 → 2: hero exits, complete train flies in
+      // NOTE: no infinite-repeat tweens in a scrubbed timeline — they corrupt
+      // GSAP's progress mapping. The train float is a CSS animation instead.
       tl.to('.ch-hero', { opacity: 0, scale: 0.96, y: -40, duration: 1 })
         .fromTo('.ch-train-reveal', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 1.2 }, '<')
         .fromTo('.train-glow', { opacity: 0 }, { opacity: 1, duration: 1 }, '<')
-        .to('.train-big', { y: -8, duration: 0.6, yoyo: true, repeat: -1 }, '<')
-        .to('.ch-train-reveal', { opacity: 0, scale: 1.06, duration: 1 }, '+=0.5')
+        .to('.ch-train-reveal', { opacity: 0, scale: 1.06, duration: 1 }, '+=1.5')
         .fromTo('.ch-exploded', { opacity: 0 }, { opacity: 1, duration: 1 }, '<')
         .fromTo('.train-exploded', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.4 }, '<');
 
