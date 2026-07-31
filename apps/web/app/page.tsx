@@ -423,6 +423,7 @@ function PopularRoutes({ selectRoute }: { selectRoute: (r: typeof popularRoutes[
           {popularRoutes.map((route, i) => (
             <motion.button
               key={route.code}
+              data-reveal
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
