@@ -34,14 +34,15 @@ const STORY_COMPONENTS = FEATURE_COMPONENTS
  * CHAPTER 5 — System Architecture SVG (animated data flow).
  */
 function ArchitectureDiagram() {
+  // Colors sourced from design tokens so dark/light both look right.
   const nodes = [
-    { id: 'gate', x: 8, y: 46, label: 'Admission Gate', icon: ShieldCheck, color: '#f37021' },
-    { id: 'queue', x: 30, y: 20, label: 'Fair Queue', icon: Timer, color: '#4a90d9' },
-    { id: 'id', x: 30, y: 70, label: 'Identity Verify', icon: Lock, color: '#4a90d9' },
-    { id: 'engine', x: 54, y: 46, label: 'Reservation Engine', icon: Zap, color: '#f37021' },
-    { id: 'cache', x: 76, y: 20, label: 'Redis Cache', icon: Server, color: '#4a90d9' },
-    { id: 'db', x: 76, y: 70, label: 'PostgreSQL', icon: Database, color: '#27ae60' },
-    { id: 'bus', x: 54, y: 88, label: 'Event Bus', icon: Network, color: '#b45309' },
+    { id: 'gate', x: 8, y: 46, label: 'Admission Gate', icon: ShieldCheck, color: 'var(--color-orange-500)' },
+    { id: 'queue', x: 30, y: 20, label: 'Fair Queue', icon: Timer, color: 'var(--color-irctc-400)' },
+    { id: 'id', x: 30, y: 70, label: 'Identity Verify', icon: Lock, color: 'var(--color-irctc-400)' },
+    { id: 'engine', x: 54, y: 46, label: 'Reservation Engine', icon: Zap, color: 'var(--color-orange-500)' },
+    { id: 'cache', x: 76, y: 20, label: 'Redis Cache', icon: Server, color: 'var(--color-irctc-400)' },
+    { id: 'db', x: 76, y: 70, label: 'PostgreSQL', icon: Database, color: 'var(--success)' },
+    { id: 'bus', x: 54, y: 88, label: 'Event Bus', icon: Network, color: 'var(--warning)' },
   ];
   return (
     <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
@@ -59,7 +60,7 @@ function ArchitectureDiagram() {
               stroke="currentColor" strokeWidth="0.4" strokeDasharray="1 1"
               className="opacity-30"
             />
-            <circle r="0.6" fill="#f37021" className="data-flow" style={{ ['--x' as string]: `${(nb.x - na.x) * 0.9}`, ['--y' as string]: `${(nb.y - na.y) * 0.9}` } as React.CSSProperties} />
+            <circle r="0.6" fill="var(--color-orange-500)" className="data-flow" style={{ ['--x' as string]: `${(nb.x - na.x) * 0.9}`, ['--y' as string]: `${(nb.y - na.y) * 0.9}` } as React.CSSProperties} />
           </g>
         );
       })}
