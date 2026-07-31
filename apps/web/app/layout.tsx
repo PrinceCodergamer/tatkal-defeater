@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { SiteChrome } from '@/components/site-chrome';
-import { PageTransition } from '@/components/page-transition';
 
 // Geist Sans — primary UI/display typeface (Vercel/Linear precision)
 const geistSans = Geist({
