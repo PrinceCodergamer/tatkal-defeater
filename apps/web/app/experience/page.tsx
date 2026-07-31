@@ -233,7 +233,12 @@ export default function ExperiencePage() {
       {/* Pin container */}
       <div ref={pinnedRef} className="relative h-screen overflow-hidden">
         {/* Persistent ambient background */}
-        <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,#0a1630_0%,#05070d_60%)]" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(80% 60% at 50% 0%, var(--color-stage-deep) 0%, var(--color-stage) 60%)',
+          }}
+        />
         <div className="absolute inset-0 opacity-30 [background:linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:56px_56px]" />
 
         {/* ── Chapter 1: Hero ── */}
