@@ -25,11 +25,16 @@ import {
   CreditCard,
   Bell,
 } from 'lucide-react';
-import { TRAIN_COMPONENTS, COMPLETE_TRAIN, EXPLODED_TRAIN } from '@/lib/train-assets';
+import { TRAIN_COMPONENTS, COMPLETE_TRAIN, EXPLODED_TRAIN, FEATURE_COMPONENTS } from '@/lib/train-assets';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const T = (asset: string) => `/train/${asset}`;
+
+// Engineering components the story focuses on, in order.
+const STORY_COMPONENTS = FEATURE_COMPONENTS
+  .map((asset) => TRAIN_COMPONENTS.find((c) => c.asset === asset))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
 /**
  * CHAPTER 5 — System Architecture SVG (animated data flow).
