@@ -166,8 +166,8 @@ export default function ExperiencePage() {
       // Chapter 3: exploded view stabilises, then narrative starts
       tl.to('.ch-exploded', { opacity: 0, duration: 1 }, '+=0.4');
 
-      // Chapter 4: component storytelling loop
-      TRAIN_COMPONENTS.slice(0, 7).forEach((c, i) => {
+      // Chapter 4: component storytelling loop (engineering parts)
+      STORY_COMPONENTS.forEach((c, i) => {
         tl.fromTo(`.cmp-${i}`, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.8 }, i === 0 ? '<' : '+=0.3')
           .fromTo(`.cmp-label-${i}`, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.6 }, '<0.2')
           .to(`.cmp-${i}`, { opacity: 0, scale: 1.05, duration: 0.6 }, '+=1.6');
