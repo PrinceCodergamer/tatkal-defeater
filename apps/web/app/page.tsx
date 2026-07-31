@@ -20,6 +20,7 @@ import {
 import { HeroSection } from '@/components/hero/hero-section';
 import { CountUp } from '@/components/premium/count-up';
 import { useScrollReveal } from '@/lib/use-gsap';
+import { formatJourneyDate } from '@/lib/dates';
 
 const popularRoutes = [
   { from: 'New Delhi', to: 'Mumbai Central', code: 'NDLS-BCT', trains: 'Rajdhani, Shatabdi' },
@@ -310,7 +311,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <div className="rounded-lg bg-irctc-50 p-3 text-xs text-irctc-700 dark:bg-irctc-900/40 dark:text-irctc-300">
-                    <strong>{from}</strong> → <strong>{to}</strong> on {new Date(date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                    <strong>{from}</strong> → <strong>{to}</strong> on {formatJourneyDate(date, { year: 'numeric' })}
                   </div>
                   <button onClick={handleSearch} disabled={loading} className="irctc-btn irctc-btn-orange w-full py-3 text-base">
                     {loading ? (

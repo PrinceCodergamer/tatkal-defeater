@@ -1,10 +1,10 @@
 param(
     [string]$RepoPath = "D:\Pm987\projects\tatkal-defeater",
-    [int]$DebounceSeconds = 10
+    [int]$PollSeconds = 8
 )
 
 $logFile = Join-Path $RepoPath ".git\auto-sync.log"
-$lockFile = Join-Path $RepoPath ".git\auto-sync.lock"
+$git = "git"
 
 function Log([string]$msg) {
     $line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')  $msg"
@@ -12,31 +12,9 @@ function Log([string]$msg) {
     Add-Content -Path $logFile -Value $line
 }
 
-Log "auto-sync watcher starting on $RepoPath (debounce: ${DebounceSeconds}s)"
-
-$watcher = New-Object System.IO.FileSystemWatcher
-$watcher.Path = $RepoPath
-$watcher.IncludeSubdirectories = $true
-$watcher.NotifyFilter = [System.IO.NotifyFilters]::LastWrite -bor [System.IO.NotifyFilters]::FileName -bor [System.IO.NotifyFilters]::DirectoryName -bor [System.IO.NotifyFilters]::Size
-$watcher.EnableRaisingEvents = $true
-
-$timer = $null
-$syncLock = [System.Threading.Mutex]::new($false, "Global\TatkalAutoSync")
-
-function Start-Debounce {
-    if ($timer) { $timer.Dispose() }
-    $timer = New-Object System.Threading.Timer({
-        param($state)
-        $syncLock.WaitOne() | Out-Null
-        try { Sync-Pending }
-        finally { $syncLock.ReleaseMutex() }
-    }, $null, $DebounceSeconds * 1000, [System.Threading.Timeout]::Infinite)
-}
-
 function Sync-Pending {
     $env:GIT_TERMINAL_PROMPT = "0"
     $env:GIT_ASKPASS = "echo"
-    $git = "git"
 
     if (-not (Test-Path (Join-Path $RepoPath ".git"))) {
         Log "no .git directory, skipping"
@@ -48,7 +26,6 @@ function Sync-Pending {
         & $git add -A 2>&1 | Out-Null
         $staged = (& $git diff --cached --name-only 2>$null)
         if (-not $staged) {
-            Log "no changes to commit"
             return
         }
 
@@ -57,12 +34,13 @@ function Sync-Pending {
         & $git commit -m $msg 2>&1 | Out-Null
         if ($LASTEXITCODE -ne 0) {
             Log "commit failed (exit $LASTEXITCODE)"
+            & $git reset --soft HEAD^ 2>&1 | Out-Null
             return
         }
 
-        $fetch = (& $git fetch origin master 2>&1)
+        & $git fetch origin master 2>&1 | Out-Null
         $behind = (& $git rev-list --count HEAD..origin/master 2>$null)
-        if ([int]$behind -gt 0) {
+        if ($behind -and [int]$behind -gt 0) {
             Log "remote ahead by $behind commit(s), pulling with rebase"
             & $git pull --rebase origin master 2>&1 | Out-Null
             if ($LASTEXITCODE -ne 0) {
@@ -74,7 +52,7 @@ function Sync-Pending {
 
         & $git push origin master 2>&1 | Out-Null
         if ($LASTEXITCODE -eq 0) {
-            Log "pushed to origin/master"
+            Log "pushed ($(($staged | Measure-Object).Count) file(s))"
         } else {
             Log "push failed (exit $LASTEXITCODE)"
         }
@@ -84,20 +62,28 @@ function Sync-Pending {
     }
 }
 
-$action = {
-    $path = $Event.SourceEventArgs.FullPath
-    if ($path -match '\\.git[\\/]' -or $path -match '\\node_modules[\\/]' -or $path -match '\\.next[\\/]' -or $path -match '\\.turbo[\\/]' -or $path -match '\\dist[\\/]') {
-        return
-    }
-    Start-Debounce
-}
+Log "auto-sync polling started on $RepoPath (every ${PollSeconds}s)"
 
-Register-ObjectEvent $watcher "Changed" -Action $action | Out-Null
-Register-ObjectEvent $watcher "Created" -Action $action | Out-Null
-Register-ObjectEvent $watcher "Deleted" -Action $action | Out-Null
-Register-ObjectEvent $watcher "Renamed" -Action $action | Out-Null
-
-Log "watcher armed, waiting for file changes..."
 while ($true) {
-    Start-Sleep -Seconds 5
+    try {
+        Push-Location $RepoPath
+        try {
+            $changed = (& $git status --porcelain 2>$null)
+        }
+        finally {
+            Pop-Location
+        }
+        if ($changed) {
+            $isConflict = ($changed | Select-String -Pattern '^(UU|AA|DD|AU|UA|DU|UD)\s')
+            if ($isConflict) {
+                Log "merge conflict detected, skipping auto-commit"
+            } else {
+                Sync-Pending
+            }
+        }
+    }
+    catch {
+        Log "error: $_"
+    }
+    Start-Sleep -Seconds $PollSeconds
 }

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Confetti } from '@/components/premium/confetti';
 import { CountdownRing } from '@/components/premium/countdown-ring';
+import { formatJourneyDate } from '@/lib/dates';
 
 interface Passenger {
   name: string;
@@ -206,7 +207,7 @@ function BookingContent() {
           <div className="flex items-center gap-3">
             {date && (
               <span className="irctc-badge border border-irctc-200 bg-irctc-50 text-irctc-600 dark:border-irctc-800 dark:bg-irctc-900/40 dark:text-irctc-300">
-                {new Date(date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
+                {formatJourneyDate(date)}
               </span>
             )}
             {bookingStep !== 'confirmed' && (
