@@ -363,6 +363,7 @@ export default function HomePage() {
           ].map((item, i) => (
             <motion.div
               key={item.step}
+              data-reveal
               className="irctc-card p-4 text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
