@@ -52,14 +52,9 @@ export default function RootLayout({
           Skip to main content
         </a>
         <Providers>
-          <ScrollProgressBar />
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main id="main-content" className="flex-1">
-              <PageTransition>{children}</PageTransition>
-            </main>
-            <Footer />
-          </div>
+          <SiteChrome>
+            <PageTransition>{children}</PageTransition>
+          </SiteChrome>
         </Providers>
       </body>
     </html>
