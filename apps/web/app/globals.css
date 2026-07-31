@@ -755,6 +755,16 @@
   100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
 }
 
+/* Animated data-flow dot for the system-architecture diagram */
+@keyframes dataFlow {
+  from { transform: translate(0, 0); opacity: 0.9; }
+  to { transform: translate(var(--x, 10px), var(--y, 10px)); opacity: 0; }
+}
+.data-flow {
+  animation: dataFlow 2.4s ease-in-out infinite;
+  will-change: transform;
+}
+
 @layer utilities {
   .animate-fade-in { animation: fadeIn 0.4s ease-out; }
   .animate-fade-up { animation: fadeUp 0.5s ease-out; }
