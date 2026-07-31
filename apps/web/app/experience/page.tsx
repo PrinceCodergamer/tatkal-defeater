@@ -139,6 +139,10 @@ export default function ExperiencePage() {
     const pinned = pinnedRef.current;
     if (!wrap || !pinned || reduced) return;
 
+    // Keep Lenis and ScrollTrigger in sync (lenis skill rule).
+    ScrollTrigger.normalizeScroll(true);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
     const ctx = gsap.context(() => {
       // ── Timeline: 14 steps, each roughly one viewport of scroll ──
       const tl = gsap.timeline({
