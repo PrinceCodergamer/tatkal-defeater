@@ -41,8 +41,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`no-js ${geistSans.variable} ${geistMono.variable}`}
     >
+      {/* Remove .no-js on hydration so reveal animations can run */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.classList.remove('no-js');`,
+        }}
+      />
       <body className="min-h-screen antialiased bg-background text-foreground font-sans">
         <a href="#main-content" className="skip-link">
           Skip to main content
