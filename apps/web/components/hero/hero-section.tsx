@@ -63,7 +63,7 @@ export function HeroSection() {
             </MagneticButton>
             <MagneticButton
               onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              className="irctc-btn irctc-btn-outline px-8 py-3 text-base text-white"
+              className="irctc-btn px-8 py-3 text-base border border-white/30 bg-white/5 text-white backdrop-blur-sm hover:bg-white/15"
             >
               How it works
             </MagneticButton>
