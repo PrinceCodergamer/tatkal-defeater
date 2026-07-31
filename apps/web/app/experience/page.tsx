@@ -229,7 +229,7 @@ export default function ExperiencePage() {
   }
 
   return (
-    <div ref={wrapRef} className="bg-[#05070d] text-white">
+    <div ref={wrapRef} className="bg-stage text-white">
       {/* Pin container */}
       <div ref={pinnedRef} className="relative h-screen overflow-hidden">
         {/* Persistent ambient background */}
