@@ -211,7 +211,7 @@ export default function ExperiencePage() {
   if (reduced) {
     // Reduced motion: static stacked fallback — all content reachable.
     return (
-      <div className="min-h-screen bg-[#05070d] px-6 py-16 text-white">
+      <div className="min-h-screen bg-stage px-6 py-16 text-white">
         <div className="mx-auto max-w-3xl space-y-16">
           <header className="text-center">
             <h1 className="text-4xl font-black">Engineering Fairness at Planet Scale</h1>
