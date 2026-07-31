@@ -60,6 +60,10 @@
   --color-orange-900: oklch(0.40 0.15 45);
   --color-orange-950: oklch(0.32 0.12 45);
 
+  /* ── Cinematic stage (immersive /experience backdrop) ── */
+  --color-stage: #05070d;
+  --color-stage-deep: #0a1630;
+
   /* ── Back-compat aliases — map to semantic vars so legacy pages
      auto-flip with dark mode (redesigned in Phase 2) ── */
   --color-surface: var(--card);
