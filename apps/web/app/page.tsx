@@ -387,6 +387,7 @@ export default function HomePage() {
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
+                data-reveal
                 className="irctc-card p-5"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
