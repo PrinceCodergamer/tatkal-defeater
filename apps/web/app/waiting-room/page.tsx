@@ -72,8 +72,6 @@ function WaitingRoomContent() {
       return;
     }
 
-    setLoading(true);
-
     // Connect via same-origin so it works through the tunnel/proxy too.
     const socket = io('/queue', {
       query: { tokenId },
