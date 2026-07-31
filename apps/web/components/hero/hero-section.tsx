@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ShieldCheck, Zap, Timer, Users } from 'lucide-react';
+import Link from 'next/link';
+import { ShieldCheck, Zap, Timer, Users, PlayCircle } from 'lucide-react';
 import { LazyRailway } from '@/components/hero/lazy-railway';
 import { MagneticButton } from '@/components/premium/magnetic-button';
 import { Badge } from '@/components/ui/badge';
