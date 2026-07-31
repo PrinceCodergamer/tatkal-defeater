@@ -52,9 +52,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <Providers>
-          <SiteChrome>
-            <PageTransition>{children}</PageTransition>
-          </SiteChrome>
+          <SiteChrome>{children}</SiteChrome>
         </Providers>
       </body>
     </html>
