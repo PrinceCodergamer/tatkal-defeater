@@ -43,9 +43,9 @@ describe('ReservationService', () => {
       mockPrisma.$queryRawUnsafe.mockResolvedValue([
         {
           id: slotId,
-          available_capacity: 4,
+          availableCapacity: 4,
           version: 2,
-          hold_expires_at: new Date('2026-07-30T12:00:00Z'),
+          holdExpiresAt: new Date('2026-07-30T12:00:00Z'),
         },
       ]);
 
@@ -91,22 +91,22 @@ describe('ReservationService', () => {
       ).rejects.toThrow('Seat not available');
 
       expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
-        expect.stringContaining('available_capacity >= $1'),
+        expect.stringContaining('"availableCapacity" >= $1'),
         999,
         slotId,
       );
     });
 
     it('should include optimistic locking condition in SQL', async () => {
-      // The raw SQL should check hold_expires_at for stale holds
+      // The raw SQL should check holdExpiresAt for stale holds
       mockPrisma.$queryRawUnsafe.mockResolvedValue([
-        { id: slotId, available_capacity: 5, version: 1, hold_expires_at: null },
+        { id: slotId, availableCapacity: 5, version: 1, holdExpiresAt: null },
       ]);
 
       await service.allocateSeat(slotId, userId, quantity);
 
       const sql = (mockPrisma.$queryRawUnsafe as jest.Mock).mock.calls[0][0];
-      expect(sql).toContain('hold_expires_at IS NULL OR hold_expires_at < NOW()');
+      expect(sql).toContain('"holdExpiresAt" IS NULL OR "holdExpiresAt" < NOW()');
     });
   });
 

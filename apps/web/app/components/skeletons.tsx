@@ -1,96 +1,71 @@
 'use client';
 
-function Shimmer({ className = '' }: { className?: string }) {
-  return (
-    <div
-      className={`animate-pulse rounded-md bg-gray-200 ${className}`}
-      style={{ animationDuration: '1.5s' }}
-    />
-  );
-}
+import { Skeleton } from '@/components/ui/skeleton';
+
+/**
+ * Route-level skeletons — on-palette (irctc shimmer token), dark-mode safe.
+ * Minimal markup, correct proportions, no layout shift.
+ */
 
 export function HomePageSkeleton() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-b from-blue-50 to-white">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center space-y-3">
-          <Shimmer className="h-10 w-48 mx-auto" />
-          <Shimmer className="h-4 w-72 mx-auto" />
-        </div>
-
-        <div className="rounded-xl border bg-white p-6 shadow-sm space-y-4">
-          <Shimmer className="h-4 w-32" />
-          <Shimmer className="h-12 w-full" />
-          <Shimmer className="h-12 w-full" />
-        </div>
-
-        <div className="text-center space-y-2">
-          <Shimmer className="h-3 w-56 mx-auto" />
-          <Shimmer className="h-3 w-48 mx-auto" />
+    <div className="min-h-screen bg-background">
+      {/* Hero block */}
+      <div className="h-[420px] bg-gradient-to-br from-irctc-900 via-irctc-800 to-irctc-950" />
+      {/* Search card region */}
+      <div className="mx-auto -mt-10 max-w-[1200px] px-4">
+        <div className="irctc-card space-y-4 p-6">
+          <Skeleton className="h-5 w-40" />
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
+          <Skeleton className="h-12 w-full" />
         </div>
       </div>
-    </main>
+      {/* Cards region */}
+      <div className="mx-auto mt-8 max-w-[1200px] px-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-36 w-full rounded-xl" />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
 export function WaitingRoomSkeleton() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-50">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center space-y-2">
-          <Shimmer className="h-8 w-48 mx-auto" />
-          <Shimmer className="h-4 w-64 mx-auto" />
+    <div className="flex min-h-[60vh] items-center justify-center px-4 py-8">
+      <div className="w-full max-w-2xl space-y-6">
+        <div className="irctc-card space-y-6 p-8">
+          <Skeleton className="mx-auto h-5 w-48" />
+          <Skeleton className="mx-auto h-40 w-40 rounded-full" />
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="mx-auto h-3 w-2/3" />
         </div>
-
-        <div className="rounded-xl border bg-white p-6 shadow-sm text-center space-y-4">
-          <Shimmer className="h-16 w-24 mx-auto" />
-          <Shimmer className="h-4 w-36 mx-auto" />
-          <Shimmer className="h-2 w-full" />
-          <div className="space-y-2">
-            <Shimmer className="h-4 w-40 mx-auto" />
-            <Shimmer className="h-4 w-44 mx-auto" />
-          </div>
-        </div>
-
-        <Shimmer className="h-24 w-full rounded-lg" />
-
-        <Shimmer className="h-10 w-full rounded-lg" />
       </div>
-    </main>
+    </div>
   );
 }
 
 export function BookingSkeleton() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-50">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center space-y-2">
-          <Shimmer className="h-8 w-48 mx-auto" />
-          <Shimmer className="h-12 w-24 mx-auto" />
-          <Shimmer className="h-4 w-56 mx-auto" />
-        </div>
-
-        <div className="rounded-xl border bg-white p-6 space-y-4">
-          <Shimmer className="h-5 w-36" />
+    <div className="flex min-h-[60vh] items-center justify-center px-4 py-8">
+      <div className="w-full max-w-2xl space-y-6">
+        <div className="irctc-card space-y-6 p-8">
+          <Skeleton className="mx-auto h-5 w-40" />
+          <Skeleton className="mx-auto h-24 w-24 rounded-full" />
           <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <Shimmer className="h-6 w-6 rounded-full" />
-              <Shimmer className="h-4 w-48" />
-            </div>
-            <div className="flex items-center gap-3">
-              <Shimmer className="h-6 w-6 rounded-full" />
-              <Shimmer className="h-4 w-40" />
-            </div>
-            <div className="flex items-center gap-3">
-              <Shimmer className="h-6 w-6 rounded-full" />
-              <Shimmer className="h-4 w-32" />
-            </div>
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-2/3" />
           </div>
+          <Skeleton className="h-12 w-full" />
         </div>
-
-        <Shimmer className="h-12 w-full rounded-lg" />
-        <Shimmer className="h-16 w-full rounded-lg" />
       </div>
-    </main>
+    </div>
   );
 }

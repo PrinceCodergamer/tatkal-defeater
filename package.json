@@ -22,10 +22,12 @@
     "test:load:browser": "npx playwright test tests/load/playwright-simulator.ts"
   },
   "devDependencies": {
-    "turbo": "^2.4.0",
-    "typescript": "^5.6.0",
+    "@playwright/test": "^1.62.0",
+    "eslint": "^9.0.0",
     "prettier": "^3.4.0",
-    "eslint": "^9.0.0"
+    "tsx": "^4.19.0",
+    "turbo": "^2.4.0",
+    "typescript": "^5.6.0"
   },
   "engines": {
     "node": ">=20.0.0",

@@ -13,6 +13,20 @@ export class ReservationController {
     idempotencyKey: string;
     deviceFingerprint?: string;
   }) {
+    // Idempotency FIRST — a retry with an existing key returns the original
+    // reservation without touching inventory. Prevents double-decrementing
+    // capacity when a client retries after a timeout.
+    const existing = await this.reservationService.findByIdempotencyKey(
+      body.idempotencyKey,
+    );
+    if (existing) {
+      return {
+        reservationId: existing.id,
+        status: existing.status,
+        holdExpiresAt: existing.holdExpiresAt?.toISOString(),
+      };
+    }
+
     const slot = await this.reservationService.allocateSeat(
       body.slotId,
       body.userId,
@@ -23,7 +37,7 @@ export class ReservationController {
       userId: body.userId,
       slotId: body.slotId,
       quantity: body.quantity,
-      totalPrice: slot.availableCapacity > 0 ? 1500 * body.quantity : 1500 * body.quantity,
+      totalPrice: 1500 * body.quantity,
       idempotencyKey: body.idempotencyKey,
       deviceFingerprint: body.deviceFingerprint,
     });

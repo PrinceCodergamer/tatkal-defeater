@@ -1,6 +1,2 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+// Back-compat alias — canonical util lives in lib/utils.ts (shadcn/ui standard).
+export { cn } from './utils';

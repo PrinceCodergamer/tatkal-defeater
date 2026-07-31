@@ -1,16 +1,24 @@
 import type { Metadata } from 'next';
-import { Nunito_Sans } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgressBar } from '@/components/scroll-effects';
+import { PageTransition } from '@/components/page-transition';
 
-// Initialize Nunito Sans
-const nunitoSans = Nunito_Sans({
+// Geist Sans — primary UI/display typeface (Vercel/Linear precision)
+const geistSans = Geist({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-sans',
-  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-geist-sans',
+});
+
+// Geist Mono — numbers, countdowns, PNR codes, technical data
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-geist-mono',
 });
 
 export const metadata: Metadata = {
@@ -30,13 +38,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={nunitoSans.variable}>
-      <body className="min-h-screen antialiased bg-surface-alt text-text font-sans">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
+      <body className="min-h-screen antialiased bg-background text-foreground font-sans">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <Providers>
+          <ScrollProgressBar />
           <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-1">
-              {children}
+            <main id="main-content" className="flex-1">
+              <PageTransition>{children}</PageTransition>
             </main>
             <Footer />
           </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export function Header() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export function Header() {
     <>
       {/* Top Bar */}
       <div className="irctc-topbar">
-        <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-center gap-4 text-[11px]">
+        <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-center gap-4 text-xs">
           <span>🇮🇳 Indian Railways</span>
           <span className="opacity-40">|</span>
           <span>🔒 Fair Booking System</span>
@@ -36,7 +37,7 @@ export function Header() {
               </div>
               <div className="hidden sm:block">
                 <div className="text-base font-bold leading-tight tracking-wide">IRCTC</div>
-                <div className="text-[9px] opacity-70 uppercase tracking-[0.15em] font-semibold">
+                <div className="text-2xs opacity-70 uppercase tracking-[0.15em] font-semibold">
                   Tatkal Booking
                 </div>
               </div>
@@ -45,7 +46,7 @@ export function Header() {
             <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => (
                 <button
-                  key={item.path}
+                  key={item.label}
                   onClick={() => router.push(item.path)}
                   className={`irctc-nav-item ${pathname === item.path ? 'active' : ''}`}
                 >
@@ -59,9 +60,10 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="irctc-badge bg-orange-500/20 text-orange-300 border border-orange-400/30 text-[10px]">
+            <span className="irctc-badge border border-orange-400/40 bg-orange-500/15 text-orange-300">
               🎲 FAIR
             </span>
+            <ThemeToggle />
             <button
               className="md:hidden irctc-nav-item"
               onClick={() => setMenuOpen(!menuOpen)}
@@ -77,7 +79,7 @@ export function Header() {
             <div className="max-w-[1200px] mx-auto px-6 py-3 space-y-1">
               {navItems.map((item) => (
                 <button
-                  key={item.path}
+                  key={item.label}
                   onClick={() => { router.push(item.path); setMenuOpen(false); }}
                   className="w-full text-left irctc-nav-item text-sm"
                 >

@@ -3,6 +3,22 @@
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Lock,
+  UserRound,
+  CreditCard,
+  CheckCircle2,
+  ArrowLeft,
+  ArrowRight,
+  Plus,
+  Trash2,
+  Loader2,
+  PartyPopper,
+  ShieldCheck,
+  Zap,
+} from 'lucide-react';
+import { Confetti } from '@/components/premium/confetti';
+import { CountdownRing } from '@/components/premium/countdown-ring';
 
 interface Passenger {
   name: string;
@@ -14,10 +30,10 @@ interface Passenger {
 const emptyPassenger: Passenger = { name: '', age: '', berth: 'no-pref', food: 'none' };
 
 const steps = [
-  { key: 'locked', label: 'Locked', icon: '🔒' },
-  { key: 'details', label: 'Details', icon: '📝' },
-  { key: 'payment', label: 'Payment', icon: '💳' },
-  { key: 'confirmed', label: 'Confirmed', icon: '✅' },
+  { key: 'locked', label: 'Locked', icon: Lock },
+  { key: 'details', label: 'Details', icon: UserRound },
+  { key: 'payment', label: 'Payment', icon: CreditCard },
+  { key: 'confirmed', label: 'Confirmed', icon: CheckCircle2 },
 ];
 
 function BookingContent() {
@@ -93,9 +109,7 @@ function BookingContent() {
   const totalPerPassenger = baseFare + tatkalCharge + gst;
   const grandTotal = totalPerPassenger * passengers.length;
 
-  const handleProceedToDetails = () => {
-    setBookingStep('details');
-  };
+  const handleProceedToDetails = () => setBookingStep('details');
 
   const handleProceedToPayment = () => {
     const invalid = passengers.some((p) => !p.name.trim() || !p.age || parseInt(p.age) < 1);
@@ -172,31 +186,34 @@ function BookingContent() {
   const urgency = countdown < 30 ? 'critical' : countdown < 60 ? 'urgent' : 'normal';
 
   return (
-    <div className="min-h-[60vh] py-8">
-      <div className="max-w-5xl mx-auto px-4">
+    <div className="min-h-[60vh] px-4 py-8">
+      <div className="mx-auto max-w-5xl">
+        {/* Confetti on confirmation */}
+        <Confetti trigger={bookingStep === 'confirmed'} />
+
         {/* Journey Info Bar */}
         <motion.div
-          className="irctc-card p-3 flex items-center justify-between mb-6"
+          className="irctc-card mb-6 flex items-center justify-between p-3"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="flex items-center gap-3 text-sm">
             <span className="text-lg">🚄</span>
-            <span className="font-bold text-irctc-700">{fromStation || 'New Delhi'}</span>
-            <span className="text-text-muted">→</span>
-            <span className="font-bold text-irctc-700">{toStation || 'Mumbai Central'}</span>
+            <span className="font-bold text-primary">{fromStation || 'New Delhi'}</span>
+            <span className="text-muted-foreground">→</span>
+            <span className="font-bold text-primary">{toStation || 'Mumbai Central'}</span>
           </div>
           <div className="flex items-center gap-3">
             {date && (
-              <span className="irctc-badge bg-irctc-50 text-irctc-600 border border-irctc-200 text-[10px]">
+              <span className="irctc-badge border border-irctc-200 bg-irctc-50 text-irctc-600 dark:border-irctc-800 dark:bg-irctc-900/40 dark:text-irctc-300">
                 {new Date(date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
               </span>
             )}
             {bookingStep !== 'confirmed' && (
-              <span className={`irctc-badge text-[10px] font-mono tabular-nums ${
-                urgency === 'critical' ? 'bg-danger/10 text-danger border border-danger/30 animate-pulse' :
-                urgency === 'urgent' ? 'bg-orange-50 text-orange-600 border border-orange-300' :
-                'bg-irctc-50 text-irctc-600 border border-irctc-200'
+              <span className={`irctc-badge font-mono tabular-nums ${
+                urgency === 'critical' ? 'animate-pulse border border-danger/30 bg-danger/10 text-danger' :
+                urgency === 'urgent' ? 'border border-orange-300 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-300' :
+                'border border-irctc-200 bg-irctc-50 text-irctc-600 dark:border-irctc-800 dark:bg-irctc-900/40 dark:text-irctc-300'
               }`}>
                 {formatTime(countdown)}
               </span>
@@ -206,42 +223,45 @@ function BookingContent() {
 
         {/* Progress Steps */}
         <motion.div
-          className="irctc-card p-4 mb-6"
+          className="irctc-card mb-6 p-4"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
         >
-          <div className="flex items-center justify-between relative">
-            <div className="absolute top-4 left-8 right-8 h-0.5 bg-border" />
+          <div className="relative flex items-center justify-between">
+            <div className="absolute left-8 right-8 top-4 h-0.5 bg-border" />
             <motion.div
-              className="absolute top-4 left-8 h-0.5 bg-irctc-500"
+              className="absolute left-8 top-4 h-0.5 bg-primary"
               initial={{ width: 0 }}
               animate={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
               transition={{ duration: 0.5 }}
               style={{ maxWidth: 'calc(100% - 4rem)' }}
             />
-            {steps.map((step, i) => (
-              <div key={step.key} className="relative z-10 flex flex-col items-center gap-1.5">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${
-                  i < currentStepIndex ? 'bg-success text-white' :
-                  i === currentStepIndex ? 'bg-irctc-600 text-white ring-4 ring-irctc-100' :
-                  'bg-surface-alt text-text-muted border border-border'
-                }`}>
-                  {i < currentStepIndex ? '✓' : step.icon}
+            {steps.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <div key={step.key} className="relative z-10 flex flex-col items-center gap-1.5">
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
+                    i < currentStepIndex ? 'bg-success text-success-foreground' :
+                    i === currentStepIndex ? 'bg-primary text-primary-foreground ring-4 ring-primary/20' :
+                    'border border-border bg-secondary text-muted-foreground'
+                  }`}>
+                    {i < currentStepIndex ? <CheckCircle2 className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
+                  </div>
+                  <span className={`text-2xs font-medium ${
+                    i <= currentStepIndex ? 'text-foreground' : 'text-muted-foreground'
+                  }`}>
+                    {step.label}
+                  </span>
                 </div>
-                <span className={`text-[10px] font-medium ${
-                  i <= currentStepIndex ? 'text-irctc-700' : 'text-text-muted'
-                }`}>
-                  {step.label}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 lg:grid-cols-3">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6 lg:col-span-2">
             <AnimatePresence mode="wait">
               {/* Step 1: Locked */}
               {bookingStep === 'locked' && (
@@ -250,22 +270,30 @@ function BookingContent() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="irctc-card p-6 text-center space-y-4"
+                  className="irctc-card space-y-4 p-6 text-center"
                 >
                   <motion.div
-                    animate={{ scale: [1, 1.15, 1] }}
+                    animate={{ scale: [1, 1.08, 1] }}
                     transition={{ repeat: Infinity, duration: 2 }}
                     className="text-5xl"
                   >
                     🔒
                   </motion.div>
-                  <h2 className="text-xl font-black text-irctc-700">Seat Locked!</h2>
-                  <p className="text-sm text-text-muted max-w-md mx-auto">
-                    Your seat is exclusively reserved for you. No one else can book it.
-                    Complete your booking within {formatTime(countdown)}.
-                  </p>
+                  <div>
+                    <h2 className="text-xl font-black text-primary">Seat Locked!</h2>
+                    <p className="prose-width mx-auto mt-1 text-sm text-muted-foreground">
+                      Your seat is exclusively reserved for you. No one else can book it.
+                      Complete your booking within {formatTime(countdown)}.
+                    </p>
+                  </div>
+
+                  {/* Circular countdown */}
+                  <div className="flex justify-center py-2">
+                    <CountdownRing seconds={countdown} total={300} urgency={urgency} />
+                  </div>
+
                   <button onClick={handleProceedToDetails} className="irctc-btn irctc-btn-primary px-8 py-3 text-base">
-                    Fill Passenger Details
+                    Fill Passenger Details <ArrowRight className="h-4 w-4" />
                   </button>
                 </motion.div>
               )}
@@ -281,23 +309,24 @@ function BookingContent() {
                 >
                   {passengers.map((p, i) => (
                     <div key={i} className="irctc-card p-5">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-sm font-bold text-irctc-700">
+                      <div className="mb-4 flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-foreground">
                           Passenger {i + 1}
                         </h3>
                         {passengers.length > 1 && (
                           <button
                             onClick={() => removePassenger(i)}
-                            className="text-xs text-danger hover:text-danger/80 transition-colors"
+                            className="flex items-center gap-1 text-xs text-destructive transition-colors hover:text-destructive/80"
                           >
-                            Remove
+                            <Trash2 className="h-3.5 w-3.5" /> Remove
                           </button>
                         )}
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="col-span-2 sm:col-span-1">
-                          <label className="irctc-label">Full Name</label>
+                          <label className="irctc-label" htmlFor={`name-${i}`}>Full Name</label>
                           <input
+                            id={`name-${i}`}
                             type="text"
                             placeholder="As on ID proof"
                             value={p.name}
@@ -306,8 +335,9 @@ function BookingContent() {
                           />
                         </div>
                         <div>
-                          <label className="irctc-label">Age</label>
+                          <label className="irctc-label" htmlFor={`age-${i}`}>Age</label>
                           <input
+                            id={`age-${i}`}
                             type="number"
                             placeholder="Age"
                             value={p.age}
@@ -318,8 +348,9 @@ function BookingContent() {
                           />
                         </div>
                         <div>
-                          <label className="irctc-label">Berth Preference</label>
+                          <label className="irctc-label" htmlFor={`berth-${i}`}>Berth Preference</label>
                           <select
+                            id={`berth-${i}`}
                             value={p.berth}
                             onChange={(e) => updatePassenger(i, 'berth', e.target.value)}
                             className="irctc-select"
@@ -333,8 +364,9 @@ function BookingContent() {
                           </select>
                         </div>
                         <div>
-                          <label className="irctc-label">Food Choice</label>
+                          <label className="irctc-label" htmlFor={`food-${i}`}>Food Choice</label>
                           <select
+                            id={`food-${i}`}
                             value={p.food}
                             onChange={(e) => updatePassenger(i, 'food', e.target.value)}
                             className="irctc-select"
@@ -351,15 +383,16 @@ function BookingContent() {
 
                   {passengers.length < 6 && (
                     <button onClick={addPassenger} className="irctc-btn irctc-btn-outline w-full py-2.5 text-sm">
-                      + Add Passenger ({passengers.length}/6)
+                      <Plus className="h-4 w-4" /> Add Passenger ({passengers.length}/6)
                     </button>
                   )}
 
                   {error && (
                     <motion.p
+                      role="alert"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-xs text-danger bg-danger-bg px-3 py-2 rounded-md"
+                      className="rounded-md bg-destructive/10 px-3 py-2 text-xs text-destructive"
                     >
                       {error}
                     </motion.p>
@@ -367,10 +400,10 @@ function BookingContent() {
 
                   <div className="flex gap-3">
                     <button onClick={() => setBookingStep('locked')} className="irctc-btn irctc-btn-outline px-6 py-2.5">
-                      Back
+                      <ArrowLeft className="h-4 w-4" /> Back
                     </button>
                     <button onClick={handleProceedToPayment} className="irctc-btn irctc-btn-primary flex-1 py-2.5">
-                      Proceed to Payment
+                      Proceed to Payment <ArrowRight className="h-4 w-4" />
                     </button>
                   </div>
                 </motion.div>
@@ -383,36 +416,37 @@ function BookingContent() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="irctc-card p-6 space-y-5"
+                  className="irctc-card space-y-5 p-6"
                 >
-                  <h2 className="text-lg font-bold text-irctc-700 flex items-center gap-2">
-                    <span>💳</span> Fare Breakdown
+                  <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
+                    <CreditCard className="h-5 w-5 text-primary" /> Fare Breakdown
                   </h2>
 
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between text-text-secondary">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>Base Fare ({passengers.length} pax)</span>
                       <span>₹{(baseFare * passengers.length).toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between text-text-secondary">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>Tatkal Charges ({passengers.length} pax)</span>
                       <span>₹{(tatkalCharge * passengers.length).toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between text-text-secondary">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>GST @5%</span>
                       <span>₹{(gst * passengers.length).toLocaleString()}</span>
                     </div>
-                    <div className="border-t border-border pt-2 flex justify-between font-bold text-text">
+                    <div className="flex justify-between border-t border-border pt-2 font-bold text-foreground">
                       <span>Total Amount</span>
-                      <span className="text-irctc-700 text-lg">₹{grandTotal.toLocaleString()}</span>
+                      <span className="text-lg text-primary">₹{grandTotal.toLocaleString()}</span>
                     </div>
                   </div>
 
                   {error && (
                     <motion.p
+                      role="alert"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-xs text-danger bg-danger-bg px-3 py-2 rounded-md"
+                      className="rounded-md bg-destructive/10 px-3 py-2 text-xs text-destructive"
                     >
                       {error}
                     </motion.p>
@@ -420,7 +454,7 @@ function BookingContent() {
 
                   <div className="flex gap-3">
                     <button onClick={() => setBookingStep('details')} className="irctc-btn irctc-btn-outline px-6 py-2.5">
-                      Back
+                      <ArrowLeft className="h-4 w-4" /> Back
                     </button>
                     <button onClick={handlePay} disabled={loading} className="irctc-btn irctc-btn-orange flex-1 py-3 text-base">
                       Pay ₹{grandTotal.toLocaleString()}
@@ -435,31 +469,13 @@ function BookingContent() {
                   key="processing"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="irctc-card p-12 text-center space-y-4"
+                  className="irctc-card space-y-4 p-12 text-center"
                 >
-                  <motion.div
-                    animate={{ rotateY: [0, 360] }}
-                    transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-                    className="text-5xl inline-block"
-                  >
-                    💳
-                  </motion.div>
-                  <h2 className="text-lg font-bold text-irctc-700">Processing Payment</h2>
-                  <p className="text-xs text-text-muted">
-                    Please wait while we securely process your payment...
+                  <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
+                  <h2 className="text-lg font-bold text-foreground">Processing Payment…</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Securely confirming your seat with atomic database lock.
                   </p>
-                  <div className="flex justify-center">
-                    <div className="flex gap-1">
-                      {[0, 1, 2].map((i) => (
-                        <motion.div
-                          key={i}
-                          className="w-2 h-2 rounded-full bg-irctc-500"
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ repeat: Infinity, duration: 1, delay: i * 0.2 }}
-                        />
-                      ))}
-                    </div>
-                  </div>
                 </motion.div>
               )}
 
@@ -471,39 +487,39 @@ function BookingContent() {
                   animate={{ opacity: 1, scale: 1 }}
                   className="irctc-card overflow-hidden"
                 >
-                  <div className="bg-gradient-to-r from-success to-emerald-500 p-6 text-center text-white">
+                  <div className="bg-gradient-to-r from-success to-success-dark p-6 text-center text-white">
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', stiffness: 200 }}
-                      className="text-5xl mb-2"
+                      className="mb-2 text-5xl"
                     >
-                      🎉
+                      <PartyPopper className="mx-auto h-12 w-12" />
                     </motion.div>
                     <h2 className="text-xl font-black">Booking Confirmed!</h2>
-                    <p className="text-sm text-white/70 mt-1">Your ticket has been booked successfully</p>
+                    <p className="mt-1 text-sm text-white/70">Your ticket has been booked successfully</p>
                   </div>
-                  <div className="p-6 space-y-4">
+                  <div className="space-y-4 p-6">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-[10px] text-text-muted uppercase tracking-wider">PNR Number</p>
-                        <p className="font-bold text-irctc-700 text-lg">{pnr}</p>
+                        <p className="text-2xs uppercase tracking-wider text-muted-foreground">PNR Number</p>
+                        <p className="font-mono text-lg font-bold text-primary">{pnr}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] text-text-muted uppercase tracking-wider">Amount Paid</p>
-                        <p className="font-bold text-success text-lg">₹{amountPaid.toLocaleString()}</p>
+                        <p className="text-2xs uppercase tracking-wider text-muted-foreground">Amount Paid</p>
+                        <p className="font-mono text-lg font-bold text-success">₹{amountPaid.toLocaleString()}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] text-text-muted uppercase tracking-wider">Payment ID</p>
-                        <p className="font-mono text-xs text-text-secondary">{paymentId}</p>
+                        <p className="text-2xs uppercase tracking-wider text-muted-foreground">Payment ID</p>
+                        <p className="font-mono text-xs text-secondary-foreground">{paymentId}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] text-text-muted uppercase tracking-wider">Reservation ID</p>
-                        <p className="font-mono text-xs text-text-secondary">{reservationId}</p>
+                        <p className="text-2xs uppercase tracking-wider text-muted-foreground">Reservation ID</p>
+                        <p className="font-mono text-xs text-secondary-foreground">{reservationId}</p>
                       </div>
                     </div>
 
-                    <div className="bg-success-bg border border-success/20 rounded-lg p-3 text-xs text-success text-center">
+                    <div className="rounded-lg border border-success/20 bg-success/10 p-3 text-center text-xs text-success">
                       Atomic database lock guarantees no double booking. Your seat is confirmed.
                     </div>
 
@@ -528,58 +544,58 @@ function BookingContent() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
               >
-                <p className="text-[10px] text-text-muted uppercase tracking-wider mb-2">Time Remaining</p>
-                <div className={`text-4xl font-black font-mono tabular-nums ${
-                  urgency === 'critical' ? 'text-danger animate-pulse' :
-                  urgency === 'urgent' ? 'text-orange-500' :
-                  'text-irctc-700'
+                <p className="mb-2 text-2xs uppercase tracking-wider text-muted-foreground">Time Remaining</p>
+                <div className={`font-mono text-4xl font-black tabular-nums ${
+                  urgency === 'critical' ? 'animate-pulse text-destructive' :
+                  urgency === 'urgent' ? 'text-orange-600 dark:text-orange-400' :
+                  'text-primary'
                 }`}>
                   {formatTime(countdown)}
                 </div>
-                <p className="text-[10px] text-text-muted mt-2">
+                <p className="mt-2 text-2xs text-muted-foreground">
                   Seat auto-releases when timer hits 0
                 </p>
               </motion.div>
             )}
 
             {/* Booking Summary */}
-            <div className="irctc-card p-5 space-y-3">
-              <h3 className="text-sm font-bold text-irctc-700">Booking Summary</h3>
-              <div className="space-y-2 text-xs text-text-secondary">
+            <div className="irctc-card space-y-3 p-5">
+              <h3 className="text-sm font-bold text-foreground">Booking Summary</h3>
+              <div className="space-y-2 text-xs text-muted-foreground">
                 <div className="flex justify-between">
                   <span>Route</span>
-                  <span className="font-medium text-text">{fromStation || 'NDL'} → {toStation || 'BCT'}</span>
+                  <span className="font-medium text-foreground">{fromStation || 'NDL'} → {toStation || 'BCT'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Passengers</span>
-                  <span className="font-medium text-text">{passengers.length}</span>
+                  <span className="font-medium text-foreground">{passengers.length}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Class</span>
-                  <span className="font-medium text-text">AC 3 Tier (3A)</span>
+                  <span className="font-medium text-foreground">AC 3 Tier (3A)</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Quota</span>
-                  <span className="font-medium text-text">Tatkal</span>
+                  <span className="font-medium text-foreground">Tatkal</span>
                 </div>
-                <div className="border-t border-border pt-2 flex justify-between font-bold text-text">
+                <div className="flex justify-between border-t border-border pt-2 font-bold text-foreground">
                   <span>Total</span>
-                  <span className="text-irctc-700">₹{grandTotal.toLocaleString()}</span>
+                  <span className="text-primary">₹{grandTotal.toLocaleString()}</span>
                 </div>
               </div>
             </div>
 
             {/* Trust Badges */}
-            <div className="irctc-card p-4 space-y-2">
+            <div className="irctc-card space-y-2 p-4">
               {[
-                { icon: '🔒', text: 'Seat exclusively locked' },
-                { icon: '⚡', text: 'Atomic DB prevents double booking' },
-                { icon: '🛡️', text: 'HMAC-signed token verified' },
-                { icon: '💳', text: 'Idempotent payment — no duplicates' },
-              ].map((badge) => (
-                <div key={badge.text} className="flex items-center gap-2 text-[11px] text-text-secondary">
-                  <span>{badge.icon}</span>
-                  <span>{badge.text}</span>
+                { icon: Lock, text: 'Seat exclusively locked' },
+                { icon: Zap, text: 'Atomic DB prevents double booking' },
+                { icon: ShieldCheck, text: 'HMAC-signed token verified' },
+                { icon: CreditCard, text: 'Idempotent payment — no duplicates' },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-2 text-xs text-secondary-foreground">
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
+                  <span>{text}</span>
                 </div>
               ))}
             </div>
@@ -592,14 +608,7 @@ function BookingContent() {
 
 export default function BookingPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="irctc-card p-8 text-center space-y-3">
-          <div className="text-3xl animate-pulse">🔒</div>
-          <p className="text-sm text-text-muted">Loading your booking...</p>
-        </div>
-      </div>
-    }>
+    <Suspense fallback={<div className="flex min-h-[60vh] items-center justify-center">Loading…</div>}>
       <BookingContent />
     </Suspense>
   );

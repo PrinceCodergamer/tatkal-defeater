@@ -47,7 +47,7 @@ export function Footer() {
           <p className="mb-1">
             © {new Date().getFullYear()} IRCTC Fair Booking Platform. All rights reserved.
           </p>
-          <p className="text-[10px]">
+          <p>
             Built with ❤️ for fair Indian Railway booking. Not affiliated with IRCTC.
             Random lottery system ensures equal opportunity for all passengers.
           </p>

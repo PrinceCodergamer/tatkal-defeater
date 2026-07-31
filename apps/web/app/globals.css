@@ -1,139 +1,346 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 /* ═══════════════════════════════════════════════════════════════
-   IRCTC DESIGN SYSTEM — Professional Indian Railway Booking
+   IRCTC TATKAL — PREMIUM GOVERNMENT DESIGN SYSTEM
+   Creative direction: "The Calm Precision of State Infrastructure"
+   OKLCH color system · Light + Dark themes · Geist type pairing
    ═══════════════════════════════════════════════════════════════ */
 
+/* Dark mode via class strategy (next-themes toggles `.dark` on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  /* ── Primary: Indian Railways Deep Blue ── */
-  --color-irctc-900: #001a33;
-  --color-irctc-800: #002244;
-  --color-irctc-700: #003366;
-  --color-irctc-600: #004080;
-  --color-irctc-500: #00509e;
-  --color-irctc-400: #1a6bb5;
-  --color-irctc-300: #4a90d9;
-  --color-irctc-200: #8ab8e8;
-  --color-irctc-100: #c5ddf5;
-  --color-irctc-50: #e8f1fa;
+  /* ── Type Scale (modular ratio 1.25) ── */
+  --text-2xs: 0.6875rem; /* 11px — captions, badges */
+  --text-xs: 0.75rem;    /* 12px — labels, meta */
+  --text-sm: 0.875rem;   /* 14px — form fields, nav */
+  --text-base: 1rem;     /* 16px — body */
+  --text-lg: 1.25rem;    /* 20px — lead */
+  --text-xl: 1.5625rem;  /* 25px — section titles */
+  --text-2xl: 1.9531rem; /* 31px — hero sub */
+  --text-3xl: 2.4414rem; /* 39px — hero */
+  --text-4xl: 3.0518rem; /* 49px — display */
 
-  /* ── Accent: Indian Railways Orange ── */
-  --color-orange-600: #e06500;
-  --color-orange-500: #f37021;
-  --color-orange-400: #f57c00;
-  --color-orange-300: #ff8c00;
-  --color-orange-200: #ffb366;
-  --color-orange-100: #fff0e0;
-  --color-orange-50: #fff8f0;
+  /* ── Line Heights (per text role) ── */
+  --leading-heading: 1.2;
+  --leading-body: 1.6;
+  --leading-caption: 1.4;
 
-  /* ── Surface / Semantic Colors ── */
-  --color-surface: #ffffff;
-  --color-surface-alt: #f0f2f5;
-  --color-surface-hover: #e8ecf1;
-  --color-border: #dce1e8;
-  --color-border-light: #e8ecf1;
+  /* ── Letter Spacing ── */
+  --tracking-label: 0.02em;
 
-  --color-text: #333333;
-  --color-text-secondary: #666666;
-  --color-text-muted: #999999;
+  /* ── Fonts (next/font — Geist Sans + Geist Mono) ── */
+  --font-sans: var(--font-geist-sans), 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), 'SF Mono', 'JetBrains Mono', monospace;
 
-  /* ── Status ── */
-  --color-success: #27ae60;
-  --color-success-bg: #eafaf1;
-  --color-warning: #f39c12;
-  --color-warning-bg: #fef9e7;
-  --color-danger: #e74c3c;
-  --color-danger-bg: #fdedec;
+  /* ── Primary: Indian Railways Deep Blue (OKLCH, hue ≈ 252) ── */
+  --color-irctc-50:  oklch(0.97 0.008 252);
+  --color-irctc-100: oklch(0.93 0.02 252);
+  --color-irctc-200: oklch(0.87 0.04 252);
+  --color-irctc-300: oklch(0.78 0.07 252);
+  --color-irctc-400: oklch(0.68 0.10 252);
+  --color-irctc-500: oklch(0.58 0.12 252);
+  --color-irctc-600: oklch(0.48 0.12 252);
+  --color-irctc-700: oklch(0.40 0.10 252);
+  --color-irctc-800: oklch(0.32 0.08 252);
+  --color-irctc-900: oklch(0.25 0.06 252);
+  --color-irctc-950: oklch(0.18 0.04 252);
 
-  /* ── Fonts (Loaded via next/font in layout.tsx) ── */
-  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  /* ── Accent: Indian Railways Orange (OKLCH, hue ≈ 45) ── */
+  --color-orange-50:  oklch(0.97 0.02 45);
+  --color-orange-100: oklch(0.93 0.06 45);
+  --color-orange-200: oklch(0.86 0.12 45);
+  --color-orange-300: oklch(0.78 0.17 45);
+  --color-orange-400: oklch(0.70 0.19 45);
+  --color-orange-500: oklch(0.64 0.19 45);
+  --color-orange-600: oklch(0.58 0.19 45);
+  --color-orange-700: oklch(0.52 0.18 45);
+  --color-orange-800: oklch(0.46 0.17 45);
+  --color-orange-900: oklch(0.40 0.15 45);
+  --color-orange-950: oklch(0.32 0.12 45);
+
+  /* ── Back-compat aliases — map to semantic vars so legacy pages
+     auto-flip with dark mode (redesigned in Phase 2) ── */
+  --color-surface: var(--card);
+  --color-surface-alt: var(--background);
+  --color-surface-hover: var(--secondary);
+  --color-text: var(--foreground);
+  --color-text-secondary: var(--secondary-foreground);
+  --color-text-muted: var(--muted-foreground);
+  --color-border-light: var(--border);
+  --color-success-bg: oklch(0.95 0.04 152);
+  --color-success-dark: oklch(0.48 0.14 152);
+  --color-success-darker: oklch(0.42 0.13 152);
+  --color-warning-bg: oklch(0.97 0.03 65);
+  --color-danger-bg: oklch(0.95 0.03 25);
+  --color-scrollbar: var(--color-irctc-300);
+  --color-scrollbar-hover: var(--color-irctc-400);
+
+  /* ── Elevation Shadows (layered, physical) ── */
+  --shadow-card: 0 1px 3px oklch(0.25 0.03 252 / 0.08), 0 1px 2px oklch(0.25 0.03 252 / 0.05);
+  --shadow-card-hover: 0 4px 12px oklch(0.25 0.03 252 / 0.12), 0 2px 4px oklch(0.25 0.03 252 / 0.06);
+  --shadow-dropdown: 0 4px 16px oklch(0.25 0.03 252 / 0.14);
+  --shadow-modal: 0 20px 60px oklch(0.18 0.04 252 / 0.2);
+  --shadow-glow: 0 0 0 1px oklch(0.70 0.19 45 / 0.25), 0 0 24px oklch(0.70 0.19 45 / 0.35);
 
   /* ── Radius ── */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-
-  /* ── Shadows ── */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-dropdown: 0 4px 16px rgba(0, 0, 0, 0.12);
-  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.15);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
 }
-
-/* ─── Base ───────────────────────────────────────────────────── */
-body {
-  background-color: var(--color-surface-alt);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ─── Selection ──────────────────────────────────────────────── */
-::selection { background-color: var(--color-irctc-100); color: var(--color-irctc-900); }
-
-/* ─── Scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background-color: transparent; }
-::-webkit-scrollbar-thumb { background-color: #c0c8d4; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background-color: #a0aab8; }
 
 /* ═══════════════════════════════════════════════════════════════
-   IRCTC COMPONENT SYSTEM
+   SEMANTIC TOKENS — Light (default) + Dark (.dark)
+   Mapped to Tailwind utilities via @theme inline below.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --background: oklch(0.99 0.002 252);
+  --foreground: oklch(0.25 0.03 252);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.25 0.03 252);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.25 0.03 252);
+
+  --primary: oklch(0.40 0.10 252);
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.96 0.005 252);
+  --secondary-foreground: oklch(0.35 0.03 252);
+
+  --muted: oklch(0.96 0.005 252);
+  --muted-foreground: oklch(0.55 0.02 252);
+
+  --accent: oklch(0.58 0.19 45);
+  --accent-foreground: oklch(0.99 0 0);
+
+  --destructive: oklch(0.55 0.20 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.55 0.15 152);
+  --success-foreground: oklch(0.99 0 0);
+
+  --warning: oklch(0.62 0.15 65);
+  --warning-foreground: oklch(0.25 0.02 252);
+
+  --info: oklch(0.62 0.12 245);
+  --info-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.90 0.008 252);
+  --input: oklch(0.85 0.01 252);
+  --ring: oklch(0.48 0.12 252);
+
+  --radius: 0.5rem;
+
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.16 0.02 252);
+  --foreground: oklch(0.93 0.01 252);
+
+  --card: oklch(0.20 0.02 252);
+  --card-foreground: oklch(0.93 0.01 252);
+
+  --popover: oklch(0.20 0.02 252);
+  --popover-foreground: oklch(0.93 0.01 252);
+
+  --primary: oklch(0.65 0.10 252);
+  --primary-foreground: oklch(0.16 0.03 252);
+
+  --secondary: oklch(0.26 0.02 252);
+  --secondary-foreground: oklch(0.85 0.01 252);
+
+  --muted: oklch(0.26 0.02 252);
+  --muted-foreground: oklch(0.65 0.02 252);
+
+  --accent: oklch(0.64 0.19 45);
+  --accent-foreground: oklch(0.14 0.02 252);
+
+  --destructive: oklch(0.65 0.20 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.62 0.16 152);
+  --success-foreground: oklch(0.13 0.02 252);
+
+  --warning: oklch(0.72 0.15 65);
+  --warning-foreground: oklch(0.16 0.02 252);
+
+  --info: oklch(0.70 0.12 245);
+  --info-foreground: oklch(0.14 0.02 252);
+
+  --border: oklch(0.30 0.02 252);
+  --input: oklch(0.32 0.02 252);
+  --ring: oklch(0.58 0.12 252);
+
+  color-scheme: dark;
+}
+
+/* Map semantic vars to Tailwind color utilities */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* ═══ Base ──────────────────────────────────────────────────── */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-irctc-100);
+    color: var(--color-irctc-900);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--leading-heading);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* Measure constraint for longform text — 45–75ch per typography rules */
+  .prose-width {
+    max-width: 65ch;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Focus visibility — keyboard users always see a ring */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Skip link — visible only on keyboard focus */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0 0 var(--radius-md) 0;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    left: 0;
+  }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background-color: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-irctc-300);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background-color: var(--color-irctc-400); }
+
+/* ═══════════════════════════════════════════════════════════════
+   IRCTC COMPONENT SYSTEM (upgraded to semantic tokens)
    ═══════════════════════════════════════════════════════════════ */
 
 @layer components {
   /* ─── Card ─── */
   .irctc-card {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow-card);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
   }
-  .irctc-card:hover { box-shadow: var(--shadow-card-hover); }
+  .irctc-card:hover {
+    border-color: var(--color-irctc-300);
+    box-shadow: var(--shadow-card-hover);
+  }
 
   /* ─── Input ─── */
   .irctc-input {
     width: 100%;
     padding: 0.625rem 0.875rem;
-    border: 1.5px solid var(--color-border);
+    border: 1.5px solid var(--input);
     border-radius: var(--radius-md);
     font-size: 0.875rem;
-    color: var(--color-text);
-    background-color: var(--color-surface);
+    color: var(--foreground);
+    background-color: var(--card);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
     outline: none;
   }
   .irctc-input:focus {
-    border-color: var(--color-irctc-400);
-    box-shadow: 0 0 0 3px rgba(0, 80, 158, 0.1);
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px oklch(0.48 0.12 252 / 0.2);
   }
-  .irctc-input::placeholder { color: var(--color-text-muted); }
-  .irctc-input.error { border-color: var(--color-danger); }
+  .irctc-input::placeholder { color: var(--muted-foreground); }
+  .irctc-input.error { border-color: var(--destructive); }
 
   /* ─── Select ─── */
   .irctc-select {
     width: 100%;
     padding: 0.625rem 0.875rem;
-    border: 1.5px solid var(--color-border);
+    border: 1.5px solid var(--input);
     border-radius: var(--radius-md);
     font-size: 0.875rem;
-    color: var(--color-text);
-    background-color: var(--color-surface);
+    color: var(--foreground);
+    background-color: var(--card);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
     outline: none;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     padding-right: 2rem;
   }
   .irctc-select:focus {
-    border-color: var(--color-irctc-400);
-    box-shadow: 0 0 0 3px rgba(0, 80, 158, 0.1);
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px oklch(0.48 0.12 252 / 0.2);
   }
 
   /* ─── Swap Button ─── */
@@ -141,8 +348,8 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: var(--color-surface);
-    border: 1.5px solid var(--color-border);
+    background-color: var(--card);
+    border: 1.5px solid var(--border);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -154,7 +361,7 @@ body {
   .irctc-swap:hover {
     background-color: var(--color-irctc-50);
     border-color: var(--color-irctc-300);
-    box-shadow: 0 2px 8px rgba(0, 80, 158, 0.15);
+    box-shadow: var(--shadow-card-hover);
   }
 
   /* ─── Buttons ─── */
@@ -171,38 +378,51 @@ body {
     transition: all 0.15s ease;
     border: none;
     letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
   }
   .irctc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .irctc-btn-primary {
     background: linear-gradient(180deg, var(--color-irctc-600) 0%, var(--color-irctc-700) 100%);
     color: white;
-    box-shadow: 0 2px 4px rgba(0, 51, 102, 0.3);
+    box-shadow: 0 2px 4px oklch(0.32 0.08 252 / 0.35);
   }
   .irctc-btn-primary:hover:not(:disabled) {
     background: linear-gradient(180deg, var(--color-irctc-500) 0%, var(--color-irctc-600) 100%);
-    box-shadow: 0 4px 8px rgba(0, 51, 102, 0.4);
+    box-shadow: 0 4px 8px oklch(0.32 0.08 252 / 0.4);
+    transform: translateY(-1px);
   }
+  .irctc-btn-primary:active:not(:disabled) { transform: translateY(0); }
 
+  /* White text on orange must sit on orange-700+ to pass WCAG AA (4.5:1) */
   .irctc-btn-orange {
-    background: linear-gradient(180deg, var(--color-orange-400) 0%, var(--color-orange-500) 100%);
+    background: linear-gradient(180deg, var(--color-orange-600) 0%, var(--color-orange-800) 100%);
     color: white;
-    box-shadow: 0 2px 4px rgba(243, 112, 33, 0.3);
+    box-shadow: 0 2px 4px oklch(0.46 0.17 45 / 0.35);
   }
   .irctc-btn-orange:hover:not(:disabled) {
-    background: linear-gradient(180deg, var(--color-orange-300) 0%, var(--color-orange-400) 100%);
-    box-shadow: 0 4px 8px rgba(243, 112, 33, 0.4);
+    background: linear-gradient(180deg, var(--color-orange-500) 0%, var(--color-orange-700) 100%);
+    box-shadow: 0 4px 8px oklch(0.64 0.19 45 / 0.4);
+    transform: translateY(-1px);
   }
+  .irctc-btn-orange:active:not(:disabled) { transform: translateY(0); }
 
   .irctc-btn-success {
-    background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+    background: linear-gradient(180deg, var(--success) 0%, oklch(0.48 0.14 152) 100%);
     color: white;
-    box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+    box-shadow: 0 2px 4px oklch(0.55 0.15 152 / 0.3);
   }
+  .irctc-btn-success:hover:not(:disabled) {
+    filter: brightness(1.05);
+    box-shadow: 0 4px 8px oklch(0.55 0.15 152 / 0.4);
+    transform: translateY(-1px);
+  }
+  .irctc-btn-success:active:not(:disabled) { transform: translateY(0); }
 
   .irctc-btn-outline {
-    background-color: var(--color-surface);
-    color: var(--color-irctc-700);
+    background-color: var(--card);
+    color: var(--primary);
     border: 1.5px solid var(--color-irctc-300);
   }
   .irctc-btn-outline:hover:not(:disabled) {
@@ -212,28 +432,29 @@ body {
 
   .irctc-btn-ghost {
     background-color: transparent;
-    color: var(--color-text-secondary);
+    color: var(--muted-foreground);
   }
   .irctc-btn-ghost:hover:not(:disabled) {
-    background-color: var(--color-surface-hover);
-    color: var(--color-text);
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
 
   /* ─── Badge ─── */
   .irctc-badge {
     display: inline-flex;
     align-items: center;
+    gap: 0.25rem;
     padding: 0.125rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
   }
-  .irctc-badge-blue { background-color: var(--color-irctc-100); color: var(--color-irctc-700); }
-  .irctc-badge-orange { background-color: var(--color-orange-100); color: var(--color-orange-600); }
-  .irctc-badge-green { background-color: var(--color-success-bg); color: var(--color-success); }
-  .irctc-badge-red { background-color: var(--color-danger-bg); color: var(--color-danger); }
+  .irctc-badge-blue { background-color: var(--color-irctc-100); color: var(--color-irctc-800); }
+  .irctc-badge-orange { background-color: var(--color-orange-100); color: var(--color-orange-800); }
+  .irctc-badge-green { background-color: oklch(0.95 0.04 152); color: oklch(0.40 0.12 152); }
+  .irctc-badge-red { background-color: oklch(0.95 0.03 25); color: var(--destructive); }
 
   /* ─── Tag / Chip ─── */
   .irctc-tag {
@@ -251,9 +472,9 @@ body {
   /* ─── Label ─── */
   .irctc-label {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-text-secondary);
+    color: var(--secondary-foreground);
     margin-bottom: 0.375rem;
   }
 }
@@ -263,18 +484,18 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 @layer components {
   .irctc-topbar {
-    background-color: var(--color-irctc-800);
-    color: rgba(255,255,255,0.7);
+    background-color: var(--color-irctc-900);
+    color: oklch(0.93 0.01 252 / 0.7);
     font-size: 0.75rem;
     padding: 0.375rem 0;
     text-align: center;
-    border-bottom: 2px solid var(--color-orange-400);
+    border-bottom: 2px solid var(--color-orange-500);
   }
 
   .irctc-header {
-    background: linear-gradient(180deg, var(--color-irctc-700) 0%, var(--color-irctc-800) 100%);
+    background: linear-gradient(180deg, var(--color-irctc-700) 0%, var(--color-irctc-900) 100%);
     color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px oklch(0.18 0.04 252 / 0.2);
   }
 
   .irctc-header-inner {
@@ -299,36 +520,30 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-irctc-400), var(--color-orange-400));
+    background: linear-gradient(135deg, var(--color-irctc-400), var(--color-orange-500));
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.25rem;
     font-weight: 900;
     color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .irctc-nav {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    box-shadow: 0 2px 8px oklch(0.18 0.04 252 / 0.25);
   }
 
   .irctc-nav-item {
     padding: 0.5rem 0.875rem;
     border-radius: var(--radius-md);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.8);
+    color: oklch(0.93 0.01 252 / 0.8);
     text-decoration: none;
     transition: all 0.15s ease;
     cursor: pointer;
     border: none;
     background: none;
   }
-  .irctc-nav-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
-  .irctc-nav-item.active { background-color: rgba(255,255,255,0.15); color: white; }
+  .irctc-nav-item:hover { background-color: oklch(0.93 0.01 252 / 0.1); color: white; }
+  .irctc-nav-item.active { background-color: oklch(0.93 0.01 252 / 0.15); color: white; }
 
   .irctc-nav-icon {
     display: flex;
@@ -336,11 +551,10 @@ body {
     gap: 0.375rem;
   }
 
-  /* ─── Header Sub Nav ─── */
   .irctc-subnav {
-    background-color: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    background-color: var(--card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 3px oklch(0.25 0.03 252 / 0.05);
   }
 
   .irctc-subnav-inner {
@@ -351,31 +565,33 @@ body {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
+    overflow-x: auto;
   }
 
   .irctc-subnav-item {
-    color: var(--color-text-secondary);
+    color: var(--muted-foreground);
     text-decoration: none;
     font-weight: 500;
     padding: 0.25rem 0;
     border-bottom: 2px solid transparent;
     transition: all 0.15s ease;
     cursor: pointer;
+    white-space: nowrap;
   }
-  .irctc-subnav-item:hover { color: var(--color-irctc-700); border-bottom-color: var(--color-irctc-400); }
-  .irctc-subnav-item.active { color: var(--color-irctc-700); border-bottom-color: var(--color-orange-400); font-weight: 700; }
+  .irctc-subnav-item:hover { color: var(--primary); border-bottom-color: var(--color-irctc-400); }
+  .irctc-subnav-item.active { color: var(--primary); border-bottom-color: var(--color-orange-500); font-weight: 700; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SEARCH FORM — IRCTC Style
+   SEARCH FORM
    ═══════════════════════════════════════════════════════════════ */
 @layer components {
   .irctc-search-card {
-    background-color: var(--color-surface);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 4px 20px rgba(0, 51, 102, 0.12);
-    border: 1px solid var(--color-border);
+    background-color: var(--card);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-modal);
+    border: 1px solid var(--border);
     overflow: hidden;
   }
 
@@ -404,9 +620,9 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem;
-    background-color: var(--color-irctc-50);
-    border-top: 1px solid var(--color-border-light);
-    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    background-color: var(--secondary);
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
   }
 }
 
@@ -415,8 +631,8 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 @layer components {
   .irctc-train-card {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background-color: var(--card);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.25rem;
     transition: all 0.2s ease;
@@ -424,36 +640,37 @@ body {
   }
   .irctc-train-card:hover {
     border-color: var(--color-irctc-300);
-    box-shadow: 0 4px 16px rgba(0, 80, 158, 0.1);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
   }
 
   .irctc-train-number {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 700;
-    color: var(--color-irctc-700);
+    color: var(--primary);
   }
 
   .irctc-train-name {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--foreground);
   }
 
   .irctc-train-time {
     font-size: 1.25rem;
     font-weight: 800;
-    color: var(--color-text);
+    color: var(--foreground);
   }
 
   .irctc-train-station {
     font-size: 0.75rem;
-    color: var(--color-text-secondary);
+    color: var(--muted-foreground);
     font-weight: 500;
   }
 
   .irctc-train-duration {
     font-size: 0.75rem;
-    color: var(--color-text-muted);
+    color: var(--muted-foreground);
     font-weight: 600;
   }
 }
@@ -463,13 +680,13 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 @layer components {
   .irctc-footer {
-    background-color: var(--color-irctc-900);
-    color: rgba(255,255,255,0.7);
+    background-color: var(--color-irctc-950);
+    color: oklch(0.93 0.01 252 / 0.7);
     padding: 2.5rem 0 0;
   }
 
   .irctc-footer-top {
-    border-top: 3px solid var(--color-orange-400);
+    border-top: 3px solid var(--color-orange-500);
   }
 
   .irctc-footer-inner {
@@ -479,19 +696,18 @@ body {
   }
 
   .irctc-footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid oklch(0.93 0.01 252 / 0.08);
     padding: 1rem 0;
     margin-top: 2rem;
     font-size: 0.75rem;
     text-align: center;
-    color: rgba(255,255,255,0.4);
+    color: oklch(0.93 0.01 252 / 0.4);
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════════════════════════ */
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -532,9 +748,11 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes trainMove {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100vw); }
+@keyframes trainSlide {
+  0% { transform: translateX(-120px); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
 }
 
 @layer utilities {
@@ -547,13 +765,6 @@ body {
   .animate-pulse-soft { animation: pulseSoft 2s ease-in-out infinite; }
 }
 
-@keyframes trainSlide {
-  0% { transform: translateX(-120px); opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { transform: translateX(calc(100vw + 120px)); opacity: 0; }
-}
-
 /* ─── Progress Bar ─── */
 @layer components {
   .irctc-progress {
@@ -564,7 +775,7 @@ body {
   }
   .irctc-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-irctc-500), var(--color-orange-400));
+    background: linear-gradient(90deg, var(--color-irctc-500), var(--color-orange-500));
     border-radius: 2px;
     transition: width 0.5s ease;
   }
@@ -572,7 +783,7 @@ body {
   /* ─── Divider ─── */
   .irctc-divider {
     height: 1px;
-    background-color: var(--color-border);
+    background-color: var(--border);
     margin: 1rem 0;
   }
 
@@ -594,33 +805,41 @@ body {
     flex-shrink: 0;
     transition: all 0.3s ease;
   }
-  .irctc-step-number.active { background-color: var(--color-irctc-700); color: white; }
-  .irctc-step-number.done { background-color: var(--color-success); color: white; }
-  .irctc-step-number.pending { background-color: var(--color-border); color: var(--color-text-muted); }
+  .irctc-step-number.active { background-color: var(--primary); color: var(--primary-foreground); }
+  .irctc-step-number.done { background-color: var(--success); color: var(--success-foreground); }
+  .irctc-step-number.pending { background-color: var(--border); color: var(--muted-foreground); }
 
   .irctc-step-label {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-weight: 600;
     transition: all 0.3s ease;
   }
-  .irctc-step-label.active { color: var(--color-text); }
-  .irctc-step-label.done { color: var(--color-success); }
-  .irctc-step-label.pending { color: var(--color-text-muted); }
+  .irctc-step-label.active { color: var(--foreground); }
+  .irctc-step-label.done { color: var(--success); }
+  .irctc-step-label.pending { color: var(--muted-foreground); }
 
   /* ─── Loading Skeleton ─── */
   .irctc-skeleton {
-    background: linear-gradient(90deg, #e8ecf1 25%, #f0f2f5 50%, #e8ecf1 75%);
+    background: linear-gradient(
+      90deg,
+      var(--secondary) 25%,
+      var(--card) 50%,
+      var(--secondary) 75%
+    );
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
     border-radius: var(--radius-sm);
   }
 }
 
-/* ─── Reduced Motion ─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   REDUCED MOTION — respect user preference, kill all animation
+   ═══════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
