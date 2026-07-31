@@ -1,2 +1,1 @@
-helloauto-sync test 01:27:21
-auto-sync round2
+hello
