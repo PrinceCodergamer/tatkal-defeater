@@ -290,7 +290,7 @@ export default function ExperiencePage() {
         </section>
 
         {/* ── Chapter 4: Component storytelling ── */}
-        {TRAIN_COMPONENTS.slice(0, 7).map((c, i) => (
+        {STORY_COMPONENTS.map((c, i) => (
           <section key={c.id} className={`cmp-${i} absolute inset-0 flex flex-col items-center justify-center opacity-0 px-6`}>
             <Image src={T(c.asset)} alt={c.name} width={1024} height={576} className="w-[min(88vw,880px)] drop-shadow-[0_30px_60px_rgba(0,0,0,0.55)]" loading="lazy" />
             <div className={`cmp-label-${i} mt-6 max-w-md text-center opacity-0`}>
